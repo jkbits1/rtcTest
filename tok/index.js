@@ -5,7 +5,10 @@
 "use strict";
 
 (() => {
-  const fs = require('fs');
+  const fs      = require('fs');
+  const OpenTok = require('opentok');
+
+  const oKey = "45494112";
 
   fs.readFile("sec.txt", (err, data) => {
     if (err) {
@@ -13,6 +16,17 @@
     }
 
     console.log(data.toString());
-  });
 
+    var opentok = new OpenTok(oKey, data.toString());
+    var sessionId;
+    //opentok.createSession(null, {mediaMode:"routed"}, function(error, session) {
+    opentok.createSession({mediaMode:"routed"}, (error, session) => {
+      if (error) {
+        return console.log("Error creating session:", error);
+      }
+
+      sessionId = session.sessionId;
+      console.log("Session ID: " + sessionId);
+    });
+  });
 })();
